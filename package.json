@@ -1,0 +1,26 @@
+{
+  "name": "cow-kol-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "uni-simple-router": "^1.5.5"
+  },
+  "devDependencies": {
+    "uni-read-pages": "^1.0.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buqiyuan/cow-kol-app.git"
+  },
+  "keywords": [],
+  "author": "bqy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/buqiyuan/cow-kol-app/issues"
+  },
+  "homepage": "https://github.com/buqiyuan/cow-kol-app#readme"
+}

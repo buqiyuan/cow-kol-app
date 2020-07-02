@@ -1,0 +1,92 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页,
+		{
+			"path": "pages/message/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "消息列表"
+			}
+		},
+		{
+			"path": "pages/document/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "云文档"
+			}
+		},
+		{
+			"path": "pages/cloud-disk/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "云盘"
+			}
+		}, {
+			"path": "pages/user/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "我的"
+			}
+		}, {
+			"path": "pages/login/index",
+			"name": "login",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		}, {
+			"path": "pages/reg/reg",
+			"name": "register",
+			"style": {
+				"navigationBarTitleText": "注册"
+			}
+		}, {
+			"path": "pages/pwd/pwd",
+			"name": "forgotPassword",
+			"style": {
+				"navigationBarTitleText": "找回密码"
+			}
+		}, {
+			"path": "pages/test/test-taobao",
+			"name": "test",
+			"style": {
+				"navigationBarTitleText": "淘宝测试页"
+			}
+		}, {
+			"path": "pages/test/test-taobao",
+			"name": "test",
+			"style": {
+				"navigationBarTitleText": "淘宝测试页"
+			}
+		}
+	],
+	"tabBar": {
+		"color": "#7a7e83",
+		"selectedColor": "#0faeff",
+		"backgroundColor": "#ffffff",
+		"list": [{
+			"pagePath": "pages/message/index",
+			"text": "消息",
+			"iconPath": "static/img/home.png",
+			"selectedIconPath": "static/img/homeHL.png"
+		}, {
+			"pagePath": "pages/cloud-disk/index",
+			"text": "云盘",
+			"iconPath": "static/img/cloud.png",
+			"selectedIconPath": "static/img/cloudHL.png"
+		}, {
+			"pagePath": "pages/document/index",
+			"text": "云文档",
+			"iconPath": "static/img/word.png",
+			"selectedIconPath": "static/img/wordHL.png"
+		}, {
+			"pagePath": "pages/user/index",
+			"text": "联系人",
+			"iconPath": "static/img/user.png",
+			"selectedIconPath": "static/img/userHL.png"
+		}]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarBackgroundColor": "#0faeff",
+		"backgroundColor": "#fbf9fe"
+	}
+}
