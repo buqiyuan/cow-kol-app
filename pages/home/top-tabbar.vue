@@ -28,15 +28,11 @@
 				scrollInto: '',
 				currentIndex: 1,
 				categories: [], // 分类
-				currentCateId: '5562b410e4b00c57d9b94a92',
+				currentCateId: '21207e9ddb1de777adeaca7a2fb38030',
 				articles: {}, // 所有的文章
 			}
 		},
-		computed: {
-			...mapState('user', ['userInfo'])
-		},
 		async created() {
-			console.log(this, '又傻 ')
 			let result = await this.$minApi.Article.getCategories()
 			if (result.statusCode === 200) {
 				let preset = [{name: '推荐', id: '21207e9ddb1de777adeaca7a2fb38030'}]
@@ -46,9 +42,8 @@
 				// 21207e9ddb1de777adeaca7a2fb38030 // 推荐
 				// 504f6ca050625a4270ba11eebe696b3c // 关注
 				result.data.d.categoryList.unshift(...preset)
-				console.log(result.data.d.categoryList)
 				this.categories = result.data.d.categoryList
-				this.currentCateId = this.categories[1].id
+				this.currentCateId = this.categories[0].id
 			}
 		},
 		methods: {

@@ -1,30 +1,30 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页,
 		{
-			"path": "pages/message/index",
+			"path": "pages/home/index",
 			"style": {
 				"navigationStyle": "custom",
-				"navigationBarTitleText": "消息列表"
+				"navigationBarTitleText": "首页"
 			}
 		},
 		{
-			"path": "pages/document/index",
+			"path": "pages/pins/index",
 			"style": {
 				"navigationStyle": "custom",
-				"navigationBarTitleText": "云文档"
+				"navigationBarTitleText": "沸点"
 			}
 		},
 		{
-			"path": "pages/cloud-disk/index",
+			"path": "pages/topic/index",
 			"style": {
 				"navigationStyle": "custom",
-				"navigationBarTitleText": "云盘"
+				"navigationBarTitleText": "话题"
 			}
 		}, {
-			"path": "pages/user/index",
+			"path": "pages/book/index",
 			"style": {
 				"navigationStyle": "custom",
-				"navigationBarTitleText": "我的"
+				"navigationBarTitleText": "小册"
 			}
 		}, {
 			"path": "pages/login/index",
@@ -45,10 +45,11 @@
 				"navigationBarTitleText": "找回密码"
 			}
 		}, {
-			"path": "pages/test/test-taobao",
-			"name": "test",
+			"path": "pages/article/article",
+			"name": "article",
 			"style": {
-				"navigationBarTitleText": "淘宝测试页"
+				"navigationStyle":"custom",
+				"navigationBarTitleText": "文章详情页"
 			}
 		}, {
 			"path": "pages/test/test-taobao",
@@ -63,25 +64,25 @@
 		"selectedColor": "#0faeff",
 		"backgroundColor": "#ffffff",
 		"list": [{
-			"pagePath": "pages/message/index",
-			"text": "消息",
-			"iconPath": "static/img/home.png",
-			"selectedIconPath": "static/img/homeHL.png"
+			"pagePath": "pages/home/index",
+			"text": "首页",
+			"iconPath": "static/img/home_default.png",
+			"selectedIconPath": "static/img/home_active.png"
 		}, {
-			"pagePath": "pages/cloud-disk/index",
-			"text": "云盘",
-			"iconPath": "static/img/cloud.png",
-			"selectedIconPath": "static/img/cloudHL.png"
+			"pagePath": "pages/pins/index",
+			"text": "沸点",
+			"iconPath": "static/img/pins_default.png",
+			"selectedIconPath": "static/img/pins_active.png"
 		}, {
-			"pagePath": "pages/document/index",
-			"text": "云文档",
-			"iconPath": "static/img/word.png",
-			"selectedIconPath": "static/img/wordHL.png"
+			"pagePath": "pages/topic/index",
+			"text": "话题",
+			"iconPath": "static/img/topic_default.png",
+			"selectedIconPath": "static/img/topic_active.png"
 		}, {
-			"pagePath": "pages/user/index",
-			"text": "联系人",
-			"iconPath": "static/img/user.png",
-			"selectedIconPath": "static/img/userHL.png"
+			"pagePath": "pages/book/index",
+			"text": "小册",
+			"iconPath": "static/img/book_default.png",
+			"selectedIconPath": "static/img/book_active.png"
 		}]
 	},
 	"globalStyle": {

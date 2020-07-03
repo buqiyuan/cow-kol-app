@@ -2,7 +2,7 @@
 	<view>
 		<scroll-view class="scroll-view" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
 		 :lower-threshold="100" @scrolltolower="onLower" @refresherrefresh="onRefresh" refresher-background="transparent">
-			<view v-for="{node} in articles.edges" :key="node.id" class="item">
+			<view v-for="{node} in articles.edges" @click="nav2Article(node)" :key="node.id" class="item">
 				<view class="top-info">
 					<view class="left">
 						<image class="user-avatar" :src="node.user.avatarLarge || defaultAvatar" />
@@ -16,7 +16,10 @@
 				</view>
 				<view class="middle-body">
 					<view class="title">{{node.title}}</view>
-					<view class="content">{{node.content}}</view>
+					<view :class="{content: node.content}">
+						<text class="text">{{node.content}}</text>
+						<image class="screenshot" v-if="node.content && node.screenshot" :src="node.screenshot"></image>
+					</view>
 				</view>
 				<view class="bottom-info">
 					<view @tap="tapLike(node)" class="info-item" :class="{'is-like': node.viewerHasLiked}">
@@ -75,6 +78,10 @@
 			}, 1000)
 		},
 		methods: {
+			nav2Article(node) { // 到文章详情页
+				// 带查询参数，变成 /router1?plan=private
+				this.$Router.push({ name: 'article', params: { postId: node.originalUrl }})
+			},
 			onLower(e) { // 上拉加载更多
 				if(this.articles.pageInfo.hasNextPage) {
 					let data = {
@@ -94,16 +101,12 @@
 				node.likeCount = node.viewerHasLiked ? --node.likeCount : ++node.likeCount
 				node.viewerHasLiked = !node.viewerHasLiked
 			},
-			// 图片防盗链问题解决
-			attachImageUrl() {
-				this.defaultAvatar = this.defaultAvatar.replace(/http\w{0,1}:\/\/p/g, 'https://images.weserv.nl/?url=p')
-			},
 			currentCateIdChange(cateId) { // 当前的分类id变化事件
 				if (cateId == this.category && !this.articles.edges.length) {
 					this.getArticles()
 				}
 			},
-			async getArticles(data = {}) { // 获取文章列表
+			async getArticles(variables = {}) { // 获取文章列表
 			if (this._freshing) return;
 			this._freshing = true;
 			if (!this.triggered) this.triggered = true; //界面下拉触发，triggered可能不是true，要设为true  
@@ -121,7 +124,7 @@
 						type: "ARTICLE",
 						"after": "",
 						"order": "POPULAR",
-						...data
+						...variables
 					},
 					"extensions": {
 						"query": {
@@ -130,20 +133,20 @@
 					}
 				}
 				// 获取文章列表
-				let result = await this.$minApi.Article.getArticles(params)
+				let {data: {data}} = await this.$minApi.Article.getArticles(params)
 				
 				let items = []
 				
 				if (this.category === '504f6ca050625a4270ba11eebe696b3c') { // 如果分类id为关注
-					result?.data.data?.followingArticleFeed?.items?.edges?.forEach(n => {
+					data?.followingArticleFeed?.items?.edges?.forEach(n => {
 							n.node = {
 								...n.node,
 								...n.node.targets[0]
 							}
 					}) ?? []
-					items = result?.data.data?.followingArticleFeed?.items || []
+					items = data?.followingArticleFeed?.items || []
 				} else {
-					items = result?.data.data?.articleFeed?.items || []
+					items = data?.articleFeed?.items || []
 				}
 				
 				if(params.variables.after) { // 如果不为空，则为加载更多
@@ -214,8 +217,19 @@
 				}
 
 				.content {
+					display: flex;
 					color: #909090;
 					font-size: 24rpx;
+					min-height: 90px;
+					.text {
+						flex: 3;
+						margin-right: 12rpx;
+					}
+					.screenshot {
+						flex: 1;
+						width: auto;
+						height: auto;
+					}
 				}
 			}
 

@@ -1,17 +1,17 @@
 <template>
 	<view class="container">
 		<view @tap="showDrawer = true" class="avatar-box">
-			<image class="avatar" :src="userInfo.avatarHd || userInfo.avatarLarge"></image>
+			<image class="avatar" :src="userInfo.user.avatarHd || userInfo.user.avatarLarge"></image>
 		</view>
 		<m-drawer :width="280" :visible="showDrawer" mode="left" @close="showDrawer = false">
 			<view class="drawer-box">
 				<view class="top-bg">
-					<image class="avatar" :src="userInfo.avatarHd || userInfo.avatarLarge"></image>
+					<image class="avatar" :src="userInfo.user.avatarHd || userInfo.user.avatarLarge"></image>
 					<view class="username">
-						{{userInfo.username}}
+						{{userInfo.user.username}}
 					</view>
 					<view class="organization">
-						{{`${userInfo.jobTitle} @ ${userInfo.company}` }}
+						{{`${userInfo.user.jobTitle} @ ${userInfo.user.company}` }}
 					</view>
 					<text class="iconfont icon-richscan_icon"></text>
 				</view>
@@ -29,10 +29,6 @@
 <script>
 	import MDrawer from './m-drawer.vue'
 	
-	import {
-		mapState
-	} from 'vuex'
-
 	export default {
 		name: 'm-avatar',
 		components: { MDrawer },
@@ -66,14 +62,6 @@
 					}
 				]
 			}
-		},
-		computed: {
-			...mapState('user', {
-				userInfo: state => state.userInfo.user
-			})
-		},
-		mounted() {
-			console.log(this.userInfo)
 		},
 		methods:{
 			handleEventName(eventName) {

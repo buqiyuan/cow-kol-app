@@ -17,7 +17,7 @@
 
 <style>
 	@import url("./static/iconfont/iconfont.css");
-
+	@import url('/static/css/article.css');
 	* {
 		box-sizing: border-box;
 	}
