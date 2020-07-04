@@ -1,6 +1,15 @@
 /* 滚动列表区域高度 */
 $scroll-view-height: calc(100vh - var(--window-bottom) - var(--status-bar-height) - 44px);
 
+/* 多行文本溢出方法*/
+@mixin ellipsisMultiline($number: 1) {
+  display: -webkit-box;
+  overflow: hidden;
+  word-break: break-all;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: $number;
+  -webkit-box-orient: vertical;
+}
 /* 页面左右间距 */
 $page-row-spacing: 30rpx;
 $page-color-base: #f8f8f8;

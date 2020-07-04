@@ -32,4 +32,11 @@ export default class Article {
 			data
 		})
 	}
+	getPinById(data) { // 获取沸点详情
+		return RequestConfig.request({
+			url: `${ApiDomains.shortMsg}/getByID`,
+			method: 'get',
+			data
+		})
+	}
 }

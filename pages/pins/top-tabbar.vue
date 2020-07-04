@@ -30,22 +30,24 @@
 			return {
 				scrollInto: '',
 				currentIndex: 1,
-				pinCategoryList: [{ // 沸点分类
-					type: "recommended",
-					name: "recommended",
-					title: "推荐 ",
-					id: "249431a8e4d85e459f6c29eb808e76d0"
-				}, {
-					type: "hot",
-					name: "hot",
-					title: "热门 ",
-					id: "f0a2fbbc03d4d46266e40762139c414c"
-				}, {
-					type: "following",
-					name: "following",
-					title: "关注 ",
-					id: "648c28f5213f7d3601f4d5efa7fa3826"
-				}, {
+				pinCategoryList: [
+				// 	{ // 沸点分类
+				// 	type: "recommended",
+				// 	name: "recommended",
+				// 	title: "推荐 ",
+				// 	id: "249431a8e4d85e459f6c29eb808e76d0"
+				// }, {
+				// 	type: "hot",
+				// 	name: "hot",
+				// 	title: "热门 ",
+				// 	id: "f0a2fbbc03d4d46266e40762139c414c"
+				// }, {
+				// 	type: "following",
+				// 	name: "following",
+				// 	title: "关注 ",
+				// 	id: "648c28f5213f7d3601f4d5efa7fa3826"
+				// },
+				{
 					type: "topic",
 					name: "opensource",
 					title: "开源推荐 ",
@@ -81,7 +83,7 @@
 					title: "New资讯",
 					id: "5c46a17f092dcb4737217152"
 				}],
-				currentCateId: '5562b410e4b00c57d9b94a92',
+				currentCateId: '5c09ea2b092dcb42c740fe73',
 				articles: {}, // 所有的文章
 			}
 		},

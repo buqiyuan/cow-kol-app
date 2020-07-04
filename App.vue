@@ -8,6 +8,21 @@
 		computed: {
 			...mapState('user', ['forcedLogin', 'hasLogin', 'userName'])
 		},
+		onShow() {
+			console.log('shenm')
+		},
+		onLaunch() {
+			
+		},
+		onLoad() {
+			
+		},
+		onHide() {
+			
+		},
+		onReady() {
+			
+		},
 		async created() {
 			// let res = await this.$minApi.user.getInfo()
 			// console.log(res, '是')

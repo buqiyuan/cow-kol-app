@@ -415,9 +415,9 @@
     margin-top: 0
 }
 
-.article-content h1+:not(.heading) {
-    margin-top: 25px
-}
+/*.article-content h1+:not(.heading) {*/
+/*    margin-top: 25px*/
+/*}*/
 
 @media (max-width: 720px) {
     .article-content h1 {

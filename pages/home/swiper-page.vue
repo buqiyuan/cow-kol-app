@@ -15,19 +15,21 @@
 					</view>
 				</view>
 				<view class="middle-body">
-					<view class="title">{{node.title}}</view>
 					<view :class="{content: node.content}">
-						<text class="text">{{node.content}}</text>
-						<image class="screenshot" v-if="node.content && node.screenshot" :src="node.screenshot"></image>
+						<view class="info">
+							<text class="title">{{node.title}}</text><br />
+							<text class="text">{{node.content}}</text>
+						</view>
+						<image mode="aspectFill" class="screenshot" v-if="node.content && node.screenshot" :src="node.screenshot"></image>
 					</view>
 				</view>
 				<view class="bottom-info">
-					<view @tap="tapLike(node)" class="info-item" :class="{'is-like': node.viewerHasLiked}">
-						<view class="zan"></view>
+					<view @tap.stop="tapLike(node)" class="info-item">
+						<image :src="`/static/svg/zan${node.viewerHasLiked ? '_active' : ''}.svg`" class="zan"></image>
 						<text>{{node.likeCount}}</text>
 					</view>
 					<view class="info-item">
-						<view class="comment"></view>
+						<image src="/static/svg/comment.svg" class="comment"></image>
 						<text>{{node.commentsCount}}</text>
 					</view>
 				</view>
@@ -102,15 +104,15 @@
 				node.viewerHasLiked = !node.viewerHasLiked
 			},
 			currentCateIdChange(cateId) { // 当前的分类id变化事件
-				if (cateId == this.category && !this.articles.edges.length) {
+				if (cateId == this.category && !this.articles?.edges?.length) {
 					this.getArticles()
 				}
 			},
 			async getArticles(variables = {}) { // 获取文章列表
 			if (this._freshing) return;
 			this._freshing = true;
-			if (!this.triggered) this.triggered = true; //界面下拉触发，triggered可能不是true，要设为true  
-									
+			if (!this.triggered) this.triggered = true; //界面下拉触发，triggered可能不是true，要设为true
+
 				// 推荐                                        // 关注
 				let preset = ['21207e9ddb1de777adeaca7a2fb38030', '504f6ca050625a4270ba11eebe696b3c']
 
@@ -134,30 +136,30 @@
 				}
 				// 获取文章列表
 				let {data: {data}} = await this.$minApi.Article.getArticles(params)
-				
+
 				let items = []
-				
+
 				if (this.category === '504f6ca050625a4270ba11eebe696b3c') { // 如果分类id为关注
 					data?.followingArticleFeed?.items?.edges?.forEach(n => {
-							n.node = {
-								...n.node,
-								...n.node.targets[0]
-							}
+						n.node = {
+							...n.node,
+							...n.node.targets[0]
+						}
 					}) ?? []
 					items = data?.followingArticleFeed?.items || []
 				} else {
 					items = data?.articleFeed?.items || []
 				}
-				
+
 				if(params.variables.after) { // 如果不为空，则为加载更多
 					this.articles.edges.push(...items.edges)
 					this.articles.pageInfo = items.pageInfo
 				} else {
 					this.articles = items
 				}
-				
+
 				this.triggered = false;//触发onRestore，并关闭刷新图标
-				this._freshing = false;  
+				this._freshing = false;
 			}
 		}
 	}
@@ -210,23 +212,28 @@
 			.middle-body {
 				padding: 10rpx 0;
 
-				.title {
-					color: #333333;
-					font-weight: 600;
-					font-size: 28rpx;
-				}
-
 				.content {
 					display: flex;
 					color: #909090;
 					font-size: 24rpx;
-					min-height: 90px;
-					.text {
-						flex: 3;
+					max-height: 80px;
+					.info {
+						flex: 5;
 						margin-right: 12rpx;
+						max-height: 100%;
+						@include ellipsisMultiline(4);
+
+						.title {
+							color: #333333;
+							font-weight: 600;
+							font-size: 28rpx;
+						}
+						.text {
+
+						}
 					}
 					.screenshot {
-						flex: 1;
+						flex: 2;
 						width: auto;
 						height: auto;
 					}
@@ -247,23 +254,24 @@
 					.comment {
 						width: 32rpx;
 						height: 32rpx;
+						background-size: contain;
 					}
 
-					.zan {
-						background-image: url(https://b-gold-cdn.xitu.io/v3/static/img/zan.e9d7698.svg);
-					}
+					/*.zan {*/
+					/*	background-image: url('/static/svg/zan.svg');*/
+					/*}*/
 
-					.comment {
-						background-image: url(https://b-gold-cdn.xitu.io/v3/static/img/comment.4d5744f.svg);
-					}
+					/*.comment {*/
+					/*	background-image: url('/static/svg/comment.svg');*/
+					/*}*/
 
-					&.is-like {
-						color: #6cbd45;
+					/*&.is-like {*/
+					/*	color: #6cbd45;*/
 
-						.zan {
-							background-image: url(https://b-gold-cdn.xitu.io/v3/static/img/zan-active.930baa2.svg);
-						}
-					}
+					/*	.zan {*/
+					/*		background-image: url('/static/svg/zan_active.svg');*/
+					/*	}*/
+					/*}*/
 				}
 			}
 		}

@@ -10,7 +10,12 @@ import MinRouter from './utils/MinRouter'
 import api from './utils/api'
 import user from './mixins/user.js'
 
+// 过滤器
+import filters from './utils/filters'
+
 import store from './store'
+
+Vue.use(filters)
 
 Vue.mixin(user)
 

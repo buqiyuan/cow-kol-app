@@ -8,7 +8,13 @@
 						<image class="user-avatar" :src="node.user.avatarLarge || defaultAvatar" />
 						<view class="user-desc">
 							<text>{{node.user.username}}</text>
-							<text>{{node.user.jobTitle}} @ {{node.user.company}}</text>
+							<view class="user-info">
+								<text>{{node.user.jobTitle}}
+									<text v-if="node.user.jobTitle">   @   </text>
+									{{node.user.company}}
+								</text>
+								<text>{{node.createdAt | dateAgo}}</text>
+							</view>
 						</view>
 					</view>
 					<view class="right">
@@ -25,13 +31,17 @@
 					</view>
 				</view>
 				<view class="bottom-info">
-					<view @tap="tapLike(node)" class="info-item" :class="{'is-like': node.viewerHasLiked}">
-						<view class="zan"></view>
-						<text>{{node.likeCount}}</text>
+					<view @tap="tapLike(node)" class="info-item">
+						<image :src="`/static/svg/zan${node.isLiked ? '_active' : ''}.svg`" class="zan"></image>
+						<text>{{node.likedCount}}</text>
 					</view>
 					<view class="info-item">
-						<view class="comment"></view>
-						<text>{{node.commentsCount}}</text>
+						<image src="/static/svg/comment.svg" class="comment"></image>
+						<text>{{node.commentCount}}</text>
+					</view>
+					<view class="info-item">
+						<image src="/static/svg/share.svg" class="share"></image>
+						<text>分享</text>
 					</view>
 				</view>
 			</view>
@@ -64,7 +74,7 @@
 					list: [],
 					page: 0,
 					pageSize: 20,
-					total: 20
+					total: 21
 				}
 			}
 		},
@@ -102,14 +112,12 @@
 				})
 			},
 			onLower(e) { // 上拉加载更多
-				if (this.articles.pageInfo.hasNextPage) {
-					let data = {
-						after: this.articles.pageInfo.endCursor
-					}
-					this.getArticles(data)
+				if (this.hasNextPage) {
+					this.getArticles()
 				}
 			},
 			onRefresh() { // 下拉刷新
+				this.pinList.page = 0
 				this.getArticles()
 			},
 			tapLike(target) { // 点赞或取消点赞
@@ -158,20 +166,32 @@
 					token: token,
 					src: 'web',
 					topicId: this.cateId,
-					page: this.pinList.page++,
+					page: this.pinList.page,
 					pageSize: this.pinList.pageSize,
 					sortType: 'rank'
 				}
 
 				// 获取文章列表
 				let {data: {d}} = await this.$minApi.Article.getPinList(params)
-				this.pinList.list = d.list
+
+				// #ifdef MP-WEIXIN
+				d.list.forEach(item => {
+					item.user.avatarLarge = this.getImage(item.user.avatarLarge)
+				})
+				// #endif
+
+				if (params.page) { // 如果不为空，则为加载更多
+					this.pinList.list.push(...d.list)
+				} else {
+					this.pinList.list = d.list
+				}
 				this.pinList.total = d.total
+				this.pinList.page++
 			},
 			async getArticles(data = {}) { // 获取文章列表
 				if (this._freshing) return;
 				this._freshing = true;
-				if (!this.triggered) this.triggered = true; //界面下拉触发，triggered可能不是true，要设为true  
+				if (!this.triggered) this.triggered = true; //界面下拉触发，triggered可能不是true，要设为true
 
 				// 推荐                                        // 关注
 				let preset = ['recommended', 'hot', 'following']
@@ -179,15 +199,8 @@
 				if (preset.includes(this.category.type)) {
 
 				} else {
-					this.getPinList()
+					await this.getPinList()
 				}
-
-				// if (params.variables.after) { // 如果不为空，则为加载更多
-				// 	this.articles.edges.push(...items.edges)
-				// 	this.articles.pageInfo = items.pageInfo
-				// } else {
-				// 	this.articles = items
-				// }
 
 				this.triggered = false; //触发onRestore，并关闭刷新图标
 				this._freshing = false;
@@ -205,10 +218,10 @@
 			display: flex;
 			flex-direction: column;
 			background-color: white;
-			padding: 14rpx;
 			margin-bottom: 16rpx;
 
 			.top-info {
+				padding: 14rpx;
 				display: flex;
 				justify-content: space-between;
 				font-size: 24rpx;
@@ -226,6 +239,11 @@
 					.user-desc {
 						display: flex;
 						flex-direction: column;
+						.user-info {
+							> text {
+								margin-right: 4px;
+							}
+						}
 					}
 				}
 
@@ -245,7 +263,7 @@
 			}
 
 			.middle-body {
-				padding: 10rpx 0;
+				padding: 10rpx;
 
 				.title {
 					color: #333333;
@@ -257,7 +275,8 @@
 					display: flex;
 					color: #909090;
 					font-size: 24rpx;
-					min-height: 90px;
+					max-height: 90px;
+					@include ellipsisMultiline(4);
 
 					.text {
 						flex: 3;
@@ -280,28 +299,16 @@
 				.info-item {
 					display: flex;
 					align-items: center;
-					margin-right: 10rpx;
+					flex: 1;
+					height: 60rpx;
+					justify-content: center;
+					border-top: 1px solid #f5f5f5;
 
-					.zan,
+					.zan,.share,
 					.comment {
 						width: 32rpx;
 						height: 32rpx;
-					}
-
-					.zan {
-						background-image: url(https://b-gold-cdn.xitu.io/v3/static/img/zan.e9d7698.svg);
-					}
-
-					.comment {
-						background-image: url(https://b-gold-cdn.xitu.io/v3/static/img/comment.4d5744f.svg);
-					}
-
-					&.is-like {
-						color: #6cbd45;
-
-						.zan {
-							background-image: url(https://b-gold-cdn.xitu.io/v3/static/img/zan-active.930baa2.svg);
-						}
+						background-size: contain;
 					}
 				}
 			}
