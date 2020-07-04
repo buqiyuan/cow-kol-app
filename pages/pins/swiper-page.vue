@@ -27,7 +27,9 @@
 					<view class="title">{{node.title}}</view>
 					<view :class="{content: node.content}">
 						<text class="text">{{node.content}}</text>
-						<image class="screenshot" v-if="node.content && node.screenshot" :src="node.screenshot"></image>
+					</view>
+					<view class="pictures">
+						<image v-for="picItem in node.pictures" class="picture-item" :key="picItem" :src="picItem"></image>
 					</view>
 				</view>
 				<view class="bottom-info">
@@ -69,7 +71,7 @@
 			return {
 				triggered: false,
 				_freshing: false,
-				defaultAvatar: 'https://juejin.im/static/img/default-avatar.e30559a.svg',
+				defaultAvatar: '/static/svg/default_avatar.svg',
 				pinList: { // 沸点列表
 					list: [],
 					page: 0,
@@ -92,15 +94,12 @@
 				return this.pinList.page * this.pinList.pageSize < this.pinList.total
 			}
 		},
-		created() {
-			// this.attachImageUrl()
-		},
-		onLoad() {
-			this._freshing = false;
-			setTimeout(() => {
-				this.triggered = true;
-			}, 1000)
-		},
+		// onLoad() {
+		// 	this._freshing = false;
+		// 	setTimeout(() => {
+		// 		this.triggered = true;
+		// 	}, 1000)
+		// },
 		methods: {
 			nav2Article(node) { // 到文章详情页
 				// 带查询参数，变成 /router1?plan=private
@@ -129,7 +128,9 @@
 				node.viewerHasLiked = !node.viewerHasLiked
 			},
 			currentCateIdChange(cateId) { // 当前的分类id变化事件
-				if (cateId == this.cateId && !this.pinList.list.length) {
+				if (cateId == this.category.id && !this.pinList.list.length) {
+					console.log(this.category.id, '55what')
+					console.log(cateId, 'what')
 					this.getPinList()
 				}
 			},
@@ -177,6 +178,7 @@
 				// #ifdef MP-WEIXIN
 				d.list.forEach(item => {
 					item.user.avatarLarge = this.getImage(item.user.avatarLarge)
+					item.pictures.forEach((n,i) => item.pictures[i] = this.getImage(n))
 				})
 				// #endif
 
@@ -271,6 +273,16 @@
 					font-size: 28rpx;
 				}
 
+				.pictures {
+					display: flex;
+					flex-wrap: wrap;
+					.picture-item {
+						flex: 1;
+						max-width: 45%;
+						min-width: 30%;
+						max-height: 180px;
+					}
+				}
 				.content {
 					display: flex;
 					color: #909090;

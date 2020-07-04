@@ -2,35 +2,35 @@
 	<view>
 		<scroll-view class="scroll-view" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
 		 :lower-threshold="100" @scrolltolower="onLower" @refresherrefresh="onRefresh" refresher-background="transparent">
-			<view v-for="{node} in articles.edges" @click="nav2Article(node)" :key="node.id" class="item">
+			<view v-for="item in articles.edges" @click="nav2Article(item.node)" :key="item.node.id" class="item">
 				<view class="top-info">
 					<view class="left">
-						<image class="user-avatar" :src="node.user.avatarLarge || defaultAvatar" />
-						<text>{{node.user.username}}</text>
+						<image class="user-avatar" :src="item.node.user.avatarLarge || defaultAvatar" />
+						<text>{{item.node.user.username}}</text>
 					</view>
 					<view class="right">
-						<text class="tag-item" v-for="tagItem in node.tags" :key="tagItem.id">
+						<text class="tag-item" v-for="tagItem in item.node.tags" :key="tagItem.id">
 							{{tagItem.title}}
 						</text>
 					</view>
 				</view>
 				<view class="middle-body">
-					<view :class="{content: node.content}">
+					<view :class="{content: item.node.content}">
 						<view class="info">
-							<text class="title">{{node.title}}</text><br />
-							<text class="text">{{node.content}}</text>
+							<text class="title">{{item.node.title}}</text><br />
+							<text class="text">{{item.node.content}}</text>
 						</view>
-						<image mode="aspectFill" class="screenshot" v-if="node.content && node.screenshot" :src="node.screenshot"></image>
+						<image mode="aspectFill" class="screenshot" v-if="item.node.content && item.node.screenshot" :src="item.node.screenshot"></image>
 					</view>
 				</view>
 				<view class="bottom-info">
-					<view @tap.stop="tapLike(node)" class="info-item">
-						<image :src="`/static/svg/zan${node.viewerHasLiked ? '_active' : ''}.svg`" class="zan"></image>
-						<text>{{node.likeCount}}</text>
+					<view @tap.stop="tapLike(item.node)" class="info-item">
+						<image :src="`/static/svg/zan${item.node.viewerHasLiked ? '_active' : ''}.svg`" class="zan"></image>
+						<text>{{item.node.likeCount}}</text>
 					</view>
 					<view class="info-item">
 						<image src="/static/svg/comment.svg" class="comment"></image>
-						<text>{{node.commentsCount}}</text>
+						<text>{{item.node.commentsCount}}</text>
 					</view>
 				</view>
 			</view>
@@ -58,7 +58,7 @@
 			return {
 				triggered: false,
 				_freshing: false ,
-				defaultAvatar: 'https://juejin.im/static/img/default-avatar.e30559a.svg',
+				defaultAvatar: '/static/svg/default_avatar.svg',
 				articles: {
 					edges: []
 				}
@@ -82,7 +82,7 @@
 		methods: {
 			nav2Article(node) { // 到文章详情页
 				// 带查询参数，变成 /router1?plan=private
-				this.$Router.push({ name: 'article', params: { postId: node.originalUrl }})
+				this.$Router.push({ name: 'article', params: { postId: node.originalUrl.split('/').reverse()[0] }})
 			},
 			onLower(e) { // 上拉加载更多
 				if(this.articles.pageInfo.hasNextPage) {
@@ -150,6 +150,13 @@
 				} else {
 					items = data?.articleFeed?.items || []
 				}
+
+				// #ifdef MP-WEIXIN
+				items.edges.forEach(n => {
+					n.node.screenshot = this.getImage(n.node.screenshot)
+					n.node.user.avatarLarge = this.getImage(n.node.user.avatarLarge)
+				})
+				// #endif
 
 				if(params.variables.after) { // 如果不为空，则为加载更多
 					this.articles.edges.push(...items.edges)

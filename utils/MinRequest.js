@@ -50,21 +50,30 @@ class MinRequest {
 
 	request(options = {}) {
 		options.baseURL = options.baseURL || this[config].baseURL
-		console.log(options.baseURL, 'baseURL')
 		options.dataType = options.dataType || this[config].dataType
-		options.data = options.data
+		// #ifdef MP-WEIXIN
+		if (options.data) {
+			let newData = {}
+			Object.keys(options.data).forEach(key => {
+				if (options.data[key] != undefined) {
+					newData[key] = options.data[key]
+				}
+			})
+			options.data = newData
+		}
+		// #endif
 		options.header = {
 			...options.header,
 			...this[config].header
 		}
 		options.method = options.method.toUpperCase() || this[config].method.toUpperCase()
 
-		options = { 
+		options = {
 			...options,
 			...MinRequest[requestBefore](options)
 		}
 		options.url = MinRequest[isCompleteURL](options.url) ? options.url : (options.baseURL + options.url)
-		
+
 		return new Promise((resolve, reject) => {
 			options.success = function(res) {
 				resolve(MinRequest[requestAfter](res))

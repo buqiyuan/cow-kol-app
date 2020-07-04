@@ -7,7 +7,7 @@ const filters = new class {
     minute = this.second * 60
     hour = this.minute * 60
     day = this.hour * 24
-    halfamonth = this.day * 15
+    halfAMonth = this.day * 15
     month = this.day * 30
 
     /**

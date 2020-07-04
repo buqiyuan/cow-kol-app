@@ -1,10 +1,12 @@
 import MinRequest from './MinRequest'
+import user from '@/store/modules/user'
 
 const minRequest = new MinRequest()
 
 // 请求拦截器
 minRequest.interceptors.request((request) => {
-	const userInfo = uni.getStorageSync('userInfo')
+	let userInfo = user.state.userInfo
+	// const userInfo = uni.getStorageSync('userInfo')
 	if (userInfo) {
 		// 全局 token
 		request.header.token = userInfo.token
@@ -26,7 +28,7 @@ minRequest.interceptors.request((request) => {
 	request.header["X-Juejin-Uid"] = userInfo.userId || ""
 	request.header["X-Juejin-Client"] = userInfo.clientId || ""
 	request.header["X-Juejin-Token"] = userInfo.token || ""
-	
+
 	return request
 })
 

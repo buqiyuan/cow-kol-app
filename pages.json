@@ -1,7 +1,8 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页,
+	"pages": [ // pages数组中第一项表示应用启动页,
 		{
 			"path": "pages/home/index",
+			"name": "index",
 			"style": {
 				"navigationStyle": "custom",
 				"navigationBarTitleText": "首页"

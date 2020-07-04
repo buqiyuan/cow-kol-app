@@ -103,9 +103,7 @@
 						title: '登录成功！',
 						icon: 'success'
 					})
-					uni.switchTab({
-						url: '/pages/message/index'
-					});
+					this.$Router.pushTab({name: 'index'})
 				} else {
 					let content = {
 						401:  "密码错误",
@@ -113,7 +111,7 @@
 						404: '手机号码不存在',
 						410: '为了你的账号安全，请重置密码'
 					}[result.statusCode] || '登录时出现错误'
-					
+
 					uni.showModal({
 						title: '提示',
 						content: content

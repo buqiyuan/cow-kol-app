@@ -1,10 +1,12 @@
-import api from '@/utils/api.js'
-const User = api.user
+import Api from '@/utils/api.js'
+import common from '@/mixins/user.js'
 const localAuth = uni.getStorageSync('auth') || {}
 const userInfo = uni.getStorageSync('userInfo') || {}
+
 const user = {
 	namespaced: true,
 	state: {
+		isLogin: userInfo?.token ? true : false, // 是否登录
 		forcedLogin: true, //是否需要强制登录
 		userInfo: { // 用户信息
 			...userInfo
@@ -14,10 +16,14 @@ const user = {
 	mutations: {
 		setUserData: (state, data) => { // 登录或注册成功后设置相应的数据
 			state.userInfo = data
+			state.isLogin = true
 			uni.setStorage({
 				key: 'userInfo',
 				data: data
 			})
+		},
+		setUserAvatar(state, url) { // 设置用户头像
+			state.userInfo.user.avatarLarge = url
 		}
 	},
 
@@ -29,9 +35,11 @@ const user = {
 			state
 		}, userInfo) {
 			return new Promise((resolve, reject) => {
-				User.login(userInfo).then(res => {
+				Api.user.login(userInfo).then(async res => {
 					console.log(res, '请求结果')
 					if (res.statusCode === 200) { // 登录成功！
+						let url = await common.methods.urlToBase64(res.data.user.avatarLarge)
+						res.data.user.avatarLarge = url
 						res.data.user.password = userInfo.password
 						commit('setUserData', res.data)
 					}
@@ -47,8 +55,8 @@ const user = {
 			state
 		}, data) { // 验证码登录
 			return new Promise((resolve, reject) => {
-				User.phoneLogin({ ...data
-				}).then(res => {
+				Api.user.phoneLogin({ ...data
+				}).then( res => {
 					console.log(res, '登录结果')
 					if (res.code === 0) { // 登录成功
 						commit('setUserData', res)
@@ -64,7 +72,7 @@ const user = {
 			state
 		}, registerParams) {
 			return new Promise((resolve, reject) => {
-				User.register(registerParams).then(res => {
+				Api.user.register(registerParams).then(res => {
 					console.log(res, '注册结果')
 					if (res.code === 0) {
 						commit('setUserData', res)
@@ -83,7 +91,7 @@ const user = {
 			state
 		}) {
 			return new Promise((resolve, reject) => {
-				User.getUserInfo(state.token).then(response => {
+				Api.user.getUserInfo(state.token).then(response => {
 					const data = response.data
 					if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
 						commit('SET_ROLES', data.roles)
@@ -105,7 +113,7 @@ const user = {
 			state
 		}) {
 			return new Promise((resolve, reject) => {
-				User.logout().then(res => {
+				Api.user.logout().then(res => {
 					commit('SET_TOKEN', '')
 					commit('SET_ROLES', [])
 					resolve(res)

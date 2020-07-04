@@ -1,17 +1,17 @@
 <template>
 	<view class="container">
 		<view @tap="showDrawer = true" class="avatar-box">
-			<image class="avatar" :src="userInfo.user.avatarHd || userInfo.user.avatarLarge"></image>
+			<image class="avatar" :src="userAvatar"></image>
 		</view>
 		<m-drawer :width="280" :visible="showDrawer" mode="left" @close="showDrawer = false">
 			<view class="drawer-box">
-				<view class="top-bg">
-					<image class="avatar" :src="userInfo.user.avatarHd || userInfo.user.avatarLarge"></image>
+				<view @tap="hasLogin" class="top-bg">
+					<image class="avatar" :src="userAvatar"></image>
 					<view class="username">
-						{{userInfo.user.username}}
+						{{userName}}
 					</view>
-					<view class="organization">
-						{{`${userInfo.user.jobTitle} @ ${userInfo.user.company}` }}
+					<view v-if="isLogin" class="organization">
+						{{ `${userInfo.user.jobTitle} @ ${userInfo.user.company}` }}
 					</view>
 					<text class="iconfont icon-richscan_icon"></text>
 				</view>
@@ -28,13 +28,14 @@
 
 <script>
 	import MDrawer from './m-drawer.vue'
-	
+
 	export default {
 		name: 'm-avatar',
 		components: { MDrawer },
 		data() {
 			return {
 				showDrawer: false,
+				defaultAvatar: '/static/svg/default_avatar.svg',
 				menuList: [
 					{
 						text: '钱包',
@@ -63,14 +64,27 @@
 				]
 			}
 		},
+		computed:{
+			userAvatar() { // 用户头像
+				return this.userInfo.user?.avatarHd || this.userInfo.user?.avatarLarge || this.defaultAvatar
+			},
+			userName() {
+				if(this.isLogin) {
+					return this.userInfo.user.username
+				} else {
+					return '未登录'
+				}
+			}
+		},
 		methods:{
 			handleEventName(eventName) {
 				this[eventName](eventName)
 			},
 			testTaobao(eventName) {
-				uni.navigateTo({
-					url: '/pages/test/test-taobao'
-				})
+
+			},
+			hasLogin() {
+				if (!this.isLogin) this.$Router.push({name: 'login'})
 			}
 		}
 	}

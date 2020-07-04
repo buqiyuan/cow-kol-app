@@ -13,7 +13,7 @@
 
 <script>
 	import TopTabbar from './top-tabbar.vue'
-	
+
 	import {
 		mapState,
 		mapActions
@@ -23,10 +23,15 @@
 		components: {TopTabbar},
 		data() {
 			return {
-				
+
 			}
 		},
-		mounted() {},
+		mounted() {
+			this.$nextTick(() => {
+				uni.preloadPage({url: "/pages/pins/index"})
+				uni.preloadPage({url: "/pages/topic/index"})
+			})
+		},
 		computed: {
 			...mapState('user', ['userInfo'])
 		},
@@ -37,5 +42,5 @@
 </script>
 
 <style lang="scss" scoped>
-	
+
 </style>

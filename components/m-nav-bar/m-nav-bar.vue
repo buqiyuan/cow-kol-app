@@ -11,7 +11,9 @@
 					<slot name="title"></slot>
 				</view>
 				<view v-if="showRight" class="right">
+					<!-- #ifdef APP-PLUS H5 -->
 					<slot name="right"></slot>
+					<!-- #endif -->
 				</view>
 			</view>
 		</view>
@@ -50,7 +52,7 @@
 		mounted() {
 			uni.getSystemInfo({
 				success: (res) => { // res - 各种参数
-					console.log(res.windowHeight); // 屏幕的宽度 
+					console.log(res.windowHeight); // 屏幕的宽度
 					const query = uni.createSelectorQuery().in(this);
 					query.select(".nav-bar").boundingClientRect((data) => { //data - 各种参数
 						let height = data.height // 获取元素高度
@@ -92,6 +94,7 @@
 				.title {
 					flex: 1;
 					text-align: center;
+					font-size: 40rpx;
 				}
 
 				::v-deep .right {
