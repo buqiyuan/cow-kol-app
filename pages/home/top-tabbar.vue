@@ -37,7 +37,7 @@
 				let result = await this.$minApi.Article.getCategories()
 				if (result.statusCode === 200) {
 					let preset = [{name: '推荐', id: '21207e9ddb1de777adeaca7a2fb38030'}]
-					if(this.userInfo?.token) {
+					if(this.isLogin) {
 						preset.push({name: '关注', id: '504f6ca050625a4270ba11eebe696b3c'})
 					}
 					// 21207e9ddb1de777adeaca7a2fb38030 // 推荐

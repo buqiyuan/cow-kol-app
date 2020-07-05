@@ -8,4 +8,6 @@ export default {
 	userStorage: 'https://user-storage-api-ms.juejin.im/v1',
 	goldTag: 'https://gold-tag-ms.juejin.im/v1',
 	userLike: 'https://user-like-wrapper-ms.juejin.im/v1',
+	topicComment: 'https://hot-topic-comment-wrapper-ms.juejin.im/v1',
+	comment: 'https://comment-wrapper-ms.juejin.im/v1',
 }

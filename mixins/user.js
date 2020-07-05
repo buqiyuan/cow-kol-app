@@ -1,5 +1,5 @@
 	import {
-		mapState
+		mapState, mapMutations
 	} from 'vuex'
 
 export default {
@@ -7,9 +7,21 @@ export default {
 		...mapState('user', {
 			userInfo: state => state.userInfo,
 			isLogin: state => state.isLogin
-		})
+		}),
+		...mapState('common', ['softInputHeight'])
+	},
+	mounted() {
+
 	},
 	methods: {
+		...mapMutations('common', ['setSoftInputHeight']),
+		toLogin() { // 去登陆
+			this.$Router.push({name: 'login'})
+		},
+		isNeedToLogin() { // 是否需要去登陆
+			if (!this.isLogin) this.toLogin()
+			return this.isLogin
+		},
 		getImage(url){
 			// 把现在的图片连接传进来，返回一个不受限制的路径
 			if(url !== undefined){

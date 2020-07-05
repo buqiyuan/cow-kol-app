@@ -4,11 +4,11 @@
 			<template v-slot:left>
 				<view class="article-top">
 					<text @click="back" class="icon-back iconfont"></text>
-					<view :class="{switchTitle: isTop}" class="user-info">
+					<view :class="{switchTitle: isTop && articleDetail.content}" class="user-info">
 						<view v-if="articleDetail.content" class="user">
 							<image :src="authorAvatar" class="user-avatar"></image>
 							<text class="username">{{author.username}}</text>
-							<image class="user-level" :src="`/static/img/level/ic_user_lv${author.level}.png`"></image>
+							<user-level :level="author.level" />
 						</view>
 						<text>文章详情页</text>
 					</view>
@@ -21,6 +21,10 @@
 					<view class="content">
 						<view class="article-title">{{articleDetail.title}}</view>
 						<view class="content" v-html="articleDetail.content"></view>
+					</view>
+					<view class="split-line"></view>
+					<view class="comment-list">
+						<comment-item v-for="commentItem in comments" :key="commentItem.id" :comment-item="commentItem" />
 					</view>
 				</scroll-view>
 			</template>
@@ -35,6 +39,7 @@
 	export default {
 		data() {
 			return {
+				comments: [], // 评论列表
 				isTop: true,
 				articleDetail: {}
 			}
@@ -57,6 +62,10 @@
 			back() {
 				this.$Router.back()
 			},
+			async getComment(data = {}, objectId) { // 获取文章评论列表
+				let {data: commentData} = await this.$minApi.Article.getComment({}, objectId)
+				this.comments = commentData.d.comments
+			},
 			async getDetailData() {
 				let {
 					data: data1
@@ -67,6 +76,7 @@
 				} = await this.getDetailDataByType('entryView')
 				console.log(data2, '第二段')
 				this.articleDetail.content = data1.d.content + data2.d.content
+				 this.getComment({}, this.articleDetail.objectId)
 			},
 			getDetailDataByType(type) {
 				let {
@@ -121,12 +131,6 @@
 						border-radius: 100%;
 					}
 
-					.user-level {
-						width: 46rpx;
-						height: 28rpx;
-						margin-left: 10rpx;
-					}
-
 					.username {
 						margin-left: 12rpx;
 						white-space: nowrap;
@@ -140,6 +144,7 @@
 		.article-content {
 			position: relative;
 			height: var(--scroll-view-height);
+			padding-bottom: 10px;
 
 			.loading-icon {
 				position: absolute;
@@ -159,7 +164,10 @@
 					margin: 20rpx;
 				}
 			}
-		}
 
+			.comment-list {
+
+			}
+		}
 	}
 </style>

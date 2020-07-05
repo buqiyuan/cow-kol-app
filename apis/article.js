@@ -39,4 +39,18 @@ export default class Article {
 			data
 		})
 	}
+	getComment(data, postId) { // 获取文章评论
+		return RequestConfig.request({
+			url: `${ApiDomains.comment}/comments/entry/${postId}`,
+			method: 'get',
+			data
+		})
+	}
+	getTopicComment(data, msgId) { // 获取沸点评论
+		return RequestConfig.request({
+			url: `${ApiDomains.topicComment}/comments/${msgId}`,
+			method: 'get',
+			data
+		})
+	}
 }

@@ -10,6 +10,11 @@ $scroll-view-height: calc(100vh - var(--window-bottom) - var(--status-bar-height
   -webkit-line-clamp: $number;
   -webkit-box-orient: vertical;
 }
+
+$theme: #007fff;
+$success: #6cbd45;
+$success-2: #74ca46;
+
 /* 页面左右间距 */
 $page-row-spacing: 30rpx;
 $page-color-base: #f8f8f8;

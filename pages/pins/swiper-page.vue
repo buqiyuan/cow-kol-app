@@ -4,19 +4,11 @@
 		 :lower-threshold="100" @scrolltolower="onLower" @refresherrefresh="onRefresh" refresher-background="transparent">
 			<view v-for="node in pinList.list" @click="nav2Article(node)" :key="node.objectId" class="item">
 				<view class="top-info">
-					<view class="left">
-						<image class="user-avatar" :src="node.user.avatarLarge || defaultAvatar" />
-						<view class="user-desc">
-							<text>{{node.user.username}}</text>
-							<view class="user-info">
-								<text>{{node.user.jobTitle}}
-									<text v-if="node.user.jobTitle">   @   </text>
-									{{node.user.company}}
-								</text>
-								<text>{{node.createdAt | dateAgo}}</text>
-							</view>
-						</view>
-					</view>
+					<user-item :data="node">
+						<template v-slot:action>
+							<follow-btn  v-if="!node.user.viewerIsFollowing" size="small" :is-follow.sync="node.user.viewerIsFollowing" type="user" :followee-id="node.user.uid"></follow-btn>
+						</template>
+					</user-item>
 					<view class="right">
 						<text class="tag-item" v-for="tagItem in node.tags" :key="tagItem.id">
 							{{tagItem.title}}
@@ -71,7 +63,6 @@
 			return {
 				triggered: false,
 				_freshing: false,
-				defaultAvatar: '/static/svg/default_avatar.svg',
 				pinList: { // 沸点列表
 					list: [],
 					page: 0,
@@ -104,9 +95,9 @@
 			nav2Article(node) { // 到文章详情页
 				// 带查询参数，变成 /router1?plan=private
 				this.$Router.push({
-					name: 'article',
+					name: 'pins-detail',
 					params: {
-						postId: node.originalUrl
+						msgId: node.objectId
 					}
 				})
 			},
@@ -223,31 +214,10 @@
 			margin-bottom: 16rpx;
 
 			.top-info {
-				padding: 14rpx;
+				padding: 20rpx 28rpx;
 				display: flex;
 				justify-content: space-between;
 				font-size: 24rpx;
-
-				.left {
-					display: flex;
-					align-items: center;
-
-					.user-avatar {
-						width: 64rpx;
-						height: 64rpx;
-						border-radius: 64rpx;
-						margin-right: 6rpx;
-					}
-					.user-desc {
-						display: flex;
-						flex-direction: column;
-						.user-info {
-							> text {
-								margin-right: 4px;
-							}
-						}
-					}
-				}
 
 				.right {
 					color: #b2bac2;
@@ -265,7 +235,7 @@
 			}
 
 			.middle-body {
-				padding: 10rpx;
+				padding: 10rpx 28rpx;
 
 				.title {
 					color: #333333;

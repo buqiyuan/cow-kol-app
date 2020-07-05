@@ -17,7 +17,7 @@
 				<view class="middle-body">
 					<view :class="{content: item.node.content}">
 						<view class="info">
-							<text class="title">{{item.node.title}}</text><br />
+							<text class="title">{{item.node.title + '\n'}}</text>
 							<text class="text">{{item.node.content}}</text>
 						</view>
 						<image mode="aspectFill" class="screenshot" v-if="item.node.content && item.node.screenshot" :src="item.node.screenshot"></image>
@@ -82,7 +82,7 @@
 		methods: {
 			nav2Article(node) { // 到文章详情页
 				// 带查询参数，变成 /router1?plan=private
-				this.$Router.push({ name: 'article', params: { postId: node.originalUrl.split('/').reverse()[0] }})
+				this.$Router.push({ name: 'article-detail', params: { postId: node.originalUrl.split('/').reverse()[0] }})
 			},
 			onLower(e) { // 上拉加载更多
 				if(this.articles.pageInfo.hasNextPage) {
@@ -226,6 +226,8 @@
 					max-height: 80px;
 					.info {
 						flex: 5;
+						display: flex;
+						flex-direction: column;
 						margin-right: 12rpx;
 						max-height: 100%;
 						@include ellipsisMultiline(4);
@@ -236,7 +238,6 @@
 							font-size: 28rpx;
 						}
 						.text {
-
 						}
 					}
 					.screenshot {

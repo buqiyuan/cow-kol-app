@@ -12,16 +12,16 @@
 			console.log('shenm')
 		},
 		onLaunch() {
-			
+
 		},
 		onLoad() {
-			
+
 		},
 		onHide() {
-			
+
 		},
 		onReady() {
-			
+
 		},
 		async created() {
 			// let res = await this.$minApi.user.getInfo()
@@ -36,10 +36,15 @@
 	* {
 		box-sizing: border-box;
 	}
-	body {
+	page {
 		font-size: 16px;
 		height: 100vh;
 		overflow: hidden;
 		--scroll-view-height: calc(100vh - var(--window-bottom) - var(--status-bar-height) - 44px - 50px);
 	}
+    .split-line {
+        width: 100%;
+        height: 10px;
+        background-color: #eee;
+    }
 </style>

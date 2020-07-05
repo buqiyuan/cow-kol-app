@@ -11,14 +11,17 @@
 					<slot name="title"></slot>
 				</view>
 				<view v-if="showRight" class="right">
-					<!-- #ifdef APP-PLUS H5 -->
+					<!-- #ifdef APP-PLUS || H5 -->
 					<slot name="right"></slot>
 					<!-- #endif -->
 				</view>
 			</view>
 		</view>
 		<view class="body">
-			<slot name="content"></slot>
+			<view v-show="loading" class="loading-box">
+				<image class="loading-image" src="/static/svg/loading.svg"></image>
+			</view>
+			<slot v-show="!loading" name="content"></slot>
 		</view>
 	</view>
 </template>
@@ -46,6 +49,7 @@
 		},
 		data() {
 			return {
+				loading:true,
 				navbarHeight: 0
 			}
 		},
@@ -58,6 +62,7 @@
 						let height = data.height // 获取元素高度
 						this.navbarHeight = height + 'px'
 					}).exec()
+					setTimeout(() => this.loading = false, 1200)
 				}
 			})
 		}
@@ -105,6 +110,22 @@
 					view {
 						margin-left: 12px;
 					}
+				}
+			}
+		}
+		.body {
+			.loading-box {
+				width: 100vw;
+				height: 100vh;
+				position: fixed;
+				z-index: 999;
+				background-color: #fff;
+
+				.loading-image {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
 				}
 			}
 		}

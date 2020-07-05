@@ -46,11 +46,18 @@
 				"navigationBarTitleText": "找回密码"
 			}
 		}, {
-			"path": "pages/article/article",
-			"name": "article",
+			"path": "pages/article-detail/article-detail",
+			"name": "article-detail",
 			"style": {
 				"navigationStyle":"custom",
 				"navigationBarTitleText": "文章详情页"
+			}
+		},  {
+			"path": "pages/pins-detail/pins-detail",
+			"name": "pins-detail",
+			"style": {
+				"navigationStyle":"custom",
+				"navigationBarTitleText": "沸点详情页"
 			}
 		}, {
 			"path": "pages/test/test-taobao",
@@ -85,6 +92,9 @@
 			"iconPath": "static/img/book_default.png",
 			"selectedIconPath": "static/img/book_active.png"
 		}]
+	},
+	"app-plus": {
+		"softinputMode": "adjustResize"
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "white",

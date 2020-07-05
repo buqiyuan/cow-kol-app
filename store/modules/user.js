@@ -38,8 +38,9 @@ const user = {
 				Api.user.login(userInfo).then(async res => {
 					console.log(res, '请求结果')
 					if (res.statusCode === 200) { // 登录成功！
-						let url = await common.methods.urlToBase64(res.data.user.avatarLarge)
-						res.data.user.avatarLarge = url
+						let avatar = res.data.user.avatarHd || res.data.user.avatarLarge
+						let url = await common.methods.urlToBase64(avatar)
+						res.data.user.avatarHd = res.data.user.avatarLarge = url
 						res.data.user.password = userInfo.password
 						commit('setUserData', res.data)
 					}

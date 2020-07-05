@@ -8,9 +8,9 @@
 						<view v-if="articleDetail.content" class="user">
 							<image :src="authorAvatar" class="user-avatar"></image>
 							<text class="username">{{author.username}}</text>
-							<image class="user-level" :src="`/static/img/level/ic_user_lv${author.level}.png`"></image>
+							<user-level :level="author.level" />
 						</view>
-						<text>文章详情页</text>
+						<text>沸点详情页</text>
 					</view>
 				</view>
 			</template>
@@ -20,7 +20,14 @@
 					<image v-if="!articleDetail.content" class="loading-icon" src="/static/svg/Rolling-1s-200px.svg"></image>
 					<view class="content">
 						<view class="article-title">{{articleDetail.title}}</view>
-						<view class="content" v-html="articleDetail.content"></view>
+						<text class="content">{{articleDetail.content}}</text>
+						<view class="pictures">
+							<image v-for="picItem in articleDetail.pictures" class="picture-item" :key="picItem" :src="picItem"></image>
+						</view>
+					</view>
+					<view class="split-line"></view>
+					<view class="comment-list">
+						<comment-item v-for="commentItem in comments" :key="commentItem.id" :comment-item="commentItem" />
 					</view>
 				</scroll-view>
 			</template>
@@ -35,12 +42,13 @@
 	export default {
 		data() {
 			return {
+				comments: [], // 评论列表
 				isTop: true,
 				articleDetail: {}
 			}
 		},
 		mounted() {
-			this.getDetailData()
+			this.getPinById()
 		},
 		computed: {
 			author() {
@@ -57,18 +65,11 @@
 			back() {
 				this.$Router.back()
 			},
-			async getDetailData() {
-				let {
-					data: data1
-				} = await this.getDetailDataByType('entry')
-				this.articleDetail = data1.d
-				let {
-					data: data2
-				} = await this.getDetailDataByType('entryView')
-				console.log(data2, '第二段')
-				this.articleDetail.content = data1.d.content + data2.d.content
+			async getTopicComment(data = {}, msgId) { // 获取评论列表
+				let {data: commentData} = await this.$minApi.Article.getTopicComment({}, msgId)
+				this.comments = commentData.d.comments
 			},
-			getDetailDataByType(type) {
+			async getPinById(type) {
 				let {
 					userId,
 					clientId,
@@ -80,9 +81,16 @@
 					device_id: clientId,
 					token: token,
 					src: 'web',
-					postId: this.$Route.query.postId,
+					msgId: this.$Route.query.msgId,
 				}
-				return this.$minApi.Article.getDetailData(params)
+				let {data} = await this.$minApi.Article.getPinById(params)
+				// #ifdef MP-WEIXIN
+				data.d.forEach(item => {
+					item.pictures.forEach((n,i) => item.pictures[i] = this.getImage(n))
+				})
+				// #endif
+				this.articleDetail = data.d
+				this.getTopicComment({}, params.msgId)
 			},
 			scroll(e) {
 				this.isTop = e.detail.scrollTop < 20
@@ -140,6 +148,7 @@
 		.article-content {
 			position: relative;
 			height: var(--scroll-view-height);
+			padding-bottom: 10px;
 
 			.loading-icon {
 				position: absolute;
@@ -157,6 +166,16 @@
 					font-size: 48rpx;
 					font-weight: 700;
 					margin: 20rpx;
+				}
+				.pictures {
+					display: flex;
+					flex-wrap: wrap;
+					.picture-item {
+						flex: 1;
+						max-width: 45%;
+						min-width: 30%;
+						max-height: 180px;
+					}
 				}
 			}
 		}
