@@ -1,66 +1,46 @@
 <template>
-	<view class="content">
-		<image class="logo" :src="imgURL"></image>
-		<view>
-			<text class="title">{{title}}</text>
-		</view>
-		<view>
-			<text class="title">{{name}}</text>
-		</view>
-		<view>
-			<text class="title">{{test}}</text>
-		</view>
-		<button @click="toPage">跳转到首页页面</button>
-	</view>
+		<m-nav-bar>
+			<template v-slot:title>小册</template>
+			<template v-slot:right>
+				<text class="iconfont icon-search"></text>
+				<text class="iconfont icon-tianjia"></text>
+			</template>
+			<template v-slot:content>
+				<top-tabbar></top-tabbar>
+			</template>
+		</m-nav-bar>
 </template>
 
 <script>
+	import TopTabbar from './top-tabbar.vue'
+
+	import {
+		mapState,
+		mapActions
+	} from 'vuex'
+
 	export default {
+		components: {TopTabbar},
 		data() {
 			return {
-				title: 'my',
-				name: '',
-				test: '',
-				imgURL: '/static/logo.png'
+
 			}
 		},
-		onLoad() {
-			// 解析路由参数
-			console.log(this.$parseURL())
-
-			// 获取缓存的数据
-			this.imgURL = this.$cache.get('_imgURL')
-			this.name = this.$cache.get('name')
-			this.test = this.$cache.get('test')
-
-			console.log(this.$cache.get('delete'))
-			console.log(this.$cache.delete('delete'))
-			console.log(this.$cache.get('delete'))
+		mounted() {
+			this.$nextTick(() => {
+				uni.preloadPage({url: "/pages/pins/index"})
+				uni.preloadPage({url: "/pages/topic/index"})
+			})
+		},
+		computed: {
+			...mapState('user', ['userInfo'])
 		},
 		methods: {
-			toPage () {
-				// 跳到index的页面
-				// 不传参数可以简写成如下
-				this.$openPage('index')
-			}
+			...mapActions('user', ['Login'])
 		}
 	}
 </script>
 
-<style>
-	.content {
-		text-align: center;
-		height: 400upx;
-	}
+<style lang="scss" scoped>
 
-	.logo {
-		height: 200upx;
-		width: 200upx;
-		margin-top: 200upx;
-	}
-
-	.title {
-		font-size: 36upx;
-		color: #8f8f94;
-	}
 </style>

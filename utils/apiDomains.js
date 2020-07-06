@@ -1,7 +1,8 @@
 export default {
 	base: 'https://juejin.im',
 	webApi: 'https://web-api.juejin.im',
-	xiaoce: 'https://xiaoce-discount-storage-api-ms.juejin.im/v1',
+	xiaoceDiscount: 'https://xiaoce-discount-storage-api-ms.juejin.im/v1',
+	xiaoceTimeline: 'https://xiaoce-timeline-api-ms.juejin.im/v1',
 	ufpApi: 'https://ufp-api-ms.juejin.im',
 	postStorage: 'https://post-storage-api-ms.juejin.im/v1',
 	shortMsg: 'https://short-msg-ms.juejin.im/v1',
@@ -10,4 +11,5 @@ export default {
 	userLike: 'https://user-like-wrapper-ms.juejin.im/v1',
 	topicComment: 'https://hot-topic-comment-wrapper-ms.juejin.im/v1',
 	comment: 'https://comment-wrapper-ms.juejin.im/v1',
+	eventStorage: 'https://event-storage-api-ms.juejin.im/v1',
 }

@@ -2,15 +2,19 @@
 	<view class="top-tabbar">
 		<scroll-view :scroll-into-view="scrollInto" :scroll-x="true" :scroll="false">
 			<view class="tab-list">
-				<view @tap="tapTab(cateItem)" v-for="(cateItem, i) in categories" :key="cateItem.id" :id="`tab-${cateItem.id}`" class="tab-item" :class="{active: currentCateId == cateItem.id}">{{cateItem.name}}</view>
+				<template v-for="(cateItem, i) in categories">
+					<view @tap="tapTab(cateItem)" :key="cateItem.id" :id="`tab-${cateItem.id}`" class="tab-item" :class="{active: currentCateId == cateItem.id}">{{cateItem.name}}</view>
+				</template>
 			</view>
 		</scroll-view>
 		<view class="tab-bar-line"></view>
 		<swiper class="tab-view" v-if="categories.length" :current-item-id="currentCateId" @change="onswiperchange" @transition="onswiperscroll"
 		 :duration="300">
-			<swiper-item class="swiper-item" v-for="cateItem in categories" :item-id="cateItem.id" :key="cateItem.id">
-				<swiper-page :category="cateItem.id" :current-cate-id="currentCateId"></swiper-page>
-			</swiper-item>
+			<template v-for="cateItem in categories">
+				<swiper-item class="swiper-item" :item-id="cateItem.id" :key="cateItem.id">
+					<swiper-page :category="cateItem.id" :current-cate-id="currentCateId"></swiper-page>
+				</swiper-item>
+			</template>
 		</swiper>
 	</view>
 </template>
@@ -31,6 +35,21 @@
 				currentCateId: '21207e9ddb1de777adeaca7a2fb38030',
 				articles: {}, // 所有的文章
 			}
+		},
+		watch: {
+			isLogin(val) {
+					if (!val) {
+						this.categories = this.categories.filter(item => item.id !== '504f6ca050625a4270ba11eebe696b3c')
+						console.log(this.categories, '登出去了')
+						if (this.currentCateId == '504f6ca050625a4270ba11eebe696b3c') this.currentCateId = this.categories[0].id
+					} else {
+						let index = this.categories.findIndex(item => item.id == '504f6ca050625a4270ba11eebe696b3c')
+						if (index == -1) {
+							this.categories.splice(1, 0 ,{name: '关注', id: '504f6ca050625a4270ba11eebe696b3c'})
+							this.$forceUpdate()
+						}
+					}
+				}
 		},
 		mounted() {
 			this.$nextTick(async () => {
@@ -57,6 +76,7 @@
 
 			},
 			tapTab(cateItem) {
+				console.log(cateItem, '为啥')
 				this.currentCateId = cateItem.id
 			},
 

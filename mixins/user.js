@@ -10,9 +10,6 @@ export default {
 		}),
 		...mapState('common', ['softInputHeight'])
 	},
-	mounted() {
-
-	},
 	methods: {
 		...mapMutations('common', ['setSoftInputHeight']),
 		toLogin() { // 去登陆
@@ -25,7 +22,10 @@ export default {
 		getImage(url){
 			// 把现在的图片连接传进来，返回一个不受限制的路径
 			if(url !== undefined){
-				return url.replace(/^(http)[s]*(\:\/\/)/,'https://images.weserv.nl/?url=');
+				// #ifdef MP-WEIXIN
+				return url.includes('images.weserv') ? url : url.replace(/^(http)[s]*(\:\/\/)/,'https://images.weserv.nl/?url=')
+				// #endif
+				return url;
 			}
 		},
 		// 图片url地址转base64

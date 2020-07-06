@@ -52,12 +52,7 @@
                 return this.data.user || this.data.userInfo || {}
             },
 			avatar() {
-				// #ifdef MP-WEIXIN
-				if(!this.user.avatarLarge.includes('weserv')) {
-					return this.getImage(this.user.avatarLarge)
-				}
-				// #endif
-				return this.user.avatarLarge
+				return this.getImage(this.user.avatarLarge)
 			}
         }
     }

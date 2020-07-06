@@ -24,6 +24,11 @@ const user = {
 		},
 		setUserAvatar(state, url) { // 设置用户头像
 			state.userInfo.user.avatarLarge = url
+		},
+		LogOut(state) {
+			state.isLogin = false
+			state.userInfo = {}
+			console.log(state.isLogin, '干哈')
 		}
 	},
 
@@ -109,10 +114,7 @@ const user = {
 		},
 
 		// 登出
-		LogOut({
-			commit,
-			state
-		}) {
+		LogOut({commit,state}) {
 			return new Promise((resolve, reject) => {
 				Api.user.logout().then(res => {
 					commit('SET_TOKEN', '')

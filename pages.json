@@ -93,12 +93,9 @@
 			"selectedIconPath": "static/img/book_active.png"
 		}]
 	},
-	"app-plus": {
-		"softinputMode": "adjustResize"
-	},
 	"globalStyle": {
-		"navigationBarTextStyle": "white",
-		"navigationBarBackgroundColor": "#0faeff",
+		"navigationBarTextStyle": "black",
+		"navigationBarBackgroundColor": "#007fff",
 		"backgroundColor": "#fbf9fe"
 	}
 }

@@ -30,7 +30,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	@import url("./static/iconfont/iconfont.css");
 	@import url('/static/css/article.css');
 	* {
@@ -41,6 +41,7 @@
 		height: 100vh;
 		overflow: hidden;
 		--scroll-view-height: calc(100vh - var(--window-bottom) - var(--status-bar-height) - 44px - 50px);
+        image{will-change: transform}
 	}
     .split-line {
         width: 100%;

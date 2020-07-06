@@ -3,7 +3,7 @@
 		<m-nav-bar :navBarBorder="true" :showTitle="false" :showRight="false">
 			<template v-slot:left>
 				<view class="article-top">
-					<text @click="back" class="icon-back iconfont"></text>
+					<text @tap="back" class="icon-back iconfont"></text>
 					<view :class="{switchTitle: isTop}" class="user-info">
 						<view v-if="articleDetail.content" class="user">
 							<image :src="authorAvatar" class="user-avatar"></image>
@@ -16,13 +16,13 @@
 			</template>
 			<template v-slot:content>
 				<!-- 文章内容区 -->
-				<scroll-view @scroll="scroll" :upper-threshold="0" :scroll-y="true" class="article-content">
+				<scroll-view :scroll-into-view="scrollInto" @scroll="scroll" :upper-threshold="0" :scroll-y="true" class="article-content">
 					<image v-if="!articleDetail.content" class="loading-icon" src="/static/svg/Rolling-1s-200px.svg"></image>
 					<view class="content">
 						<view class="article-title">{{articleDetail.title}}</view>
 						<text class="content">{{articleDetail.content}}</text>
 						<view class="pictures">
-							<image v-for="picItem in articleDetail.pictures" class="picture-item" :key="picItem" :src="picItem"></image>
+							<image v-for="picItem in articleDetail.pictures" mode="aspectFill" class="picture-item" :key="picItem" :src="picItem"></image>
 						</view>
 					</view>
 					<view class="split-line"></view>
@@ -33,7 +33,7 @@
 			</template>
 		</m-nav-bar>
 		<view class="bottom-bar">
-			<comment-action-bar :article-detail="articleDetail" />
+			<comment-action-bar @scrollToComment="scrollToComment" :article-detail="articleDetail" />
 		</view>
 	</view>
 </template>
@@ -42,6 +42,7 @@
 	export default {
 		data() {
 			return {
+				scrollInto: '',
 				comments: [], // 评论列表
 				isTop: true,
 				articleDetail: {}
@@ -55,10 +56,7 @@
 				return this.articleDetail.user || {}
 			},
 			authorAvatar() {
-				// #ifdef MP-WEIXIN
 				return this.getImage(this.author.avatarLarge)
-				// #endif
-				return this.author.avatarLarge
 			}
 		},
 		methods: {
@@ -68,6 +66,10 @@
 			async getTopicComment(data = {}, msgId) { // 获取评论列表
 				let {data: commentData} = await this.$minApi.Article.getTopicComment({}, msgId)
 				this.comments = commentData.d.comments
+			},
+			scrollToComment() {
+				this.scrollInto = ''
+				setTimeout(() => this.scrollInto = 'comment-area', 100)
 			},
 			async getPinById(type) {
 				let {
@@ -85,8 +87,8 @@
 				}
 				let {data} = await this.$minApi.Article.getPinById(params)
 				// #ifdef MP-WEIXIN
-				data.d.forEach(item => {
-					item.pictures.forEach((n,i) => item.pictures[i] = this.getImage(n))
+				data.d.pictures.forEach((item,i) => {
+					data.d.pictures[i] = this.getImage(item)
 				})
 				// #endif
 				this.articleDetail = data.d

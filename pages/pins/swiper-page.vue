@@ -2,7 +2,7 @@
 	<view>
 		<scroll-view class="scroll-view" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
 		 :lower-threshold="100" @scrolltolower="onLower" @refresherrefresh="onRefresh" refresher-background="transparent">
-			<view v-for="node in pinList.list" @click="nav2Article(node)" :key="node.objectId" class="item">
+			<view v-for="node in pinList.list" @tap="nav2Article(node)" :key="node.objectId" class="item">
 				<view class="top-info">
 					<user-item :data="node">
 						<template v-slot:action>
@@ -21,7 +21,7 @@
 						<text class="text">{{node.content}}</text>
 					</view>
 					<view class="pictures">
-						<image v-for="picItem in node.pictures" class="picture-item" :key="picItem" :src="picItem"></image>
+						<image v-for="picItem in node.pictures" class="picture-item" mode="aspectFill" :lazy-load="true" :key="picItem" :src="picItem"></image>
 					</view>
 				</view>
 				<view class="bottom-info">

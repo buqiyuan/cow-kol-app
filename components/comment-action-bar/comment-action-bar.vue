@@ -2,15 +2,15 @@
     <view :style="{ '--softinput-height': softInputHeight + 'px'}" class="comment-action-bar">
         <template v-if="!isFocus">
             <view class="bottom-item">
-                <input @focus="focus" @blur="blur" :adjust-position="false" placeholder="评论千万条，友善第一条" class="input" />
+                <input @tap="isFocus = true" disabled placeholder="评论千万条，友善第一条" class="input" />
             </view>
             <view class="bottom-item">
                 <image src="/static/svg/zan.svg"></image>
-                {{articleDetail.collectionCount || articleDetail.likedCount}}
+                {{articleDetail.collectionCount || articleDetail.likedCount || 0}}
             </view>
-            <view class="bottom-item">
+            <view @tap="$emit('scrollToComment')" class="bottom-item">
                 <image src="/static/svg/comment.svg"></image>
-                {{articleDetail.commentsCount || articleDetail.commentCount}}
+                {{articleDetail.commentsCount || articleDetail.commentCount || 0}}
             </view>
         </template>
         <template v-else>

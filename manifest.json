@@ -1,7 +1,7 @@
 {
-    "name" : "juejin-app",
+    "name" : "掘金APP",
     "appid" : "__UNI__7DE2737",
-    "description" : "奶牛达人",
+    "description" : "模仿掘金APP，uniapp练手项目。",
     "versionName" : "1.0.2",
     "versionCode" : "100",
     "transformPx" : false,

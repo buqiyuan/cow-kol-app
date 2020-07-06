@@ -55,7 +55,7 @@
             line-height: 1.6;
             .reply-content {
                 padding: 14rpx;
-                background-color: #ccc;
+                background-color: #ddd;
             }
         }
         .actions {

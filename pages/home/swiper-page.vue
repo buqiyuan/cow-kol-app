@@ -2,10 +2,10 @@
 	<view>
 		<scroll-view class="scroll-view" scroll-y="true" refresher-enabled="true" :refresher-triggered="triggered"
 		 :lower-threshold="100" @scrolltolower="onLower" @refresherrefresh="onRefresh" refresher-background="transparent">
-			<view v-for="item in articles.edges" @click="nav2Article(item.node)" :key="item.node.id" class="item">
+			<view v-for="item in articles.edges" @tap="nav2Article(item.node)" :key="item.node.id" class="item">
 				<view class="top-info">
 					<view class="left">
-						<image class="user-avatar" :src="item.node.user.avatarLarge || defaultAvatar" />
+						<image class="user-avatar" :lazy-load="true" :src="item.node.user.avatarLarge || defaultAvatar" />
 						<text>{{item.node.user.username}}</text>
 					</view>
 					<view class="right">
@@ -20,7 +20,7 @@
 							<text class="title">{{item.node.title + '\n'}}</text>
 							<text class="text">{{item.node.content}}</text>
 						</view>
-						<image mode="aspectFill" class="screenshot" v-if="item.node.content && item.node.screenshot" :src="item.node.screenshot"></image>
+						<image mode="aspectFill" :lazy-load="true" class="screenshot" v-if="item.node.content && item.node.screenshot" :src="item.node.screenshot"></image>
 					</view>
 				</view>
 				<view class="bottom-info">

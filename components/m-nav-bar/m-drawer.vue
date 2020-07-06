@@ -80,8 +80,10 @@
 		methods: {
 			close() {
 				this._change('showDrawer', 'visibleSync', false)
+				// uni.showTabBar({animation:true})
 			},
 			open() {
+				// uni.hideTabBar({animation:true})
 				this._change('visibleSync', 'showDrawer', true)
 			},
 			_change(param1, param2, status) {
@@ -99,8 +101,7 @@
 </script>
 
 <style scoped>
-	/* 抽屉宽度
- */
+	/* 抽屉宽度 */
 	.uni-drawer {
 		/* #ifndef APP-NVUE */
 		display: block;

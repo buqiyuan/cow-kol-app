@@ -3,7 +3,7 @@
 		<m-nav-bar :navBarBorder="true" :showTitle="false" :showRight="false">
 			<template v-slot:left>
 				<view class="article-top">
-					<text @click="back" class="icon-back iconfont"></text>
+					<text @tap="back" class="icon-back iconfont"></text>
 					<view :class="{switchTitle: isTop && articleDetail.content}" class="user-info">
 						<view v-if="articleDetail.content" class="user">
 							<image :src="authorAvatar" class="user-avatar"></image>
@@ -16,21 +16,21 @@
 			</template>
 			<template v-slot:content>
 				<!-- 文章内容区 -->
-				<scroll-view @scroll="scroll" :upper-threshold="0" :scroll-y="true" class="article-content">
+				<scroll-view @scroll="scroll" :scroll-into-view="scrollInto" :upper-threshold="0" :scroll-y="true" class="article-content">
 					<image v-if="!articleDetail.content" class="loading-icon" src="/static/svg/Rolling-1s-200px.svg"></image>
 					<view class="content">
 						<view class="article-title">{{articleDetail.title}}</view>
 						<view class="content" v-html="articleDetail.content"></view>
 					</view>
 					<view class="split-line"></view>
-					<view class="comment-list">
+					<view id="comment-area" class="comment-list">
 						<comment-item v-for="commentItem in comments" :key="commentItem.id" :comment-item="commentItem" />
 					</view>
 				</scroll-view>
 			</template>
 		</m-nav-bar>
 		<view class="bottom-bar">
-			<comment-action-bar :article-detail="articleDetail" />
+			<comment-action-bar @scrollToComment="scrollToComment" :article-detail="articleDetail" />
 		</view>
 	</view>
 </template>
@@ -39,6 +39,7 @@
 	export default {
 		data() {
 			return {
+				scrollInto: '',
 				comments: [], // 评论列表
 				isTop: true,
 				articleDetail: {}
@@ -52,15 +53,16 @@
 				return this.articleDetail.user || {}
 			},
 			authorAvatar() {
-				// #ifdef MP-WEIXIN
 				return this.getImage(this.author.avatarLarge)
-				// #endif
-				return this.author.avatarLarge
 			}
 		},
 		methods: {
 			back() {
 				this.$Router.back()
+			},
+			scrollToComment() { // 滚动到评论区
+				this.scrollInto = ''
+				setTimeout(() => this.scrollInto = 'comment-area', 100)
 			},
 			async getComment(data = {}, objectId) { // 获取文章评论列表
 				let {data: commentData} = await this.$minApi.Article.getComment({}, objectId)

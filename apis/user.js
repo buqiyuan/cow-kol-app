@@ -11,6 +11,14 @@ export default class User {
 			data
 		})
 	}
+	// 登出
+	logout(data) {
+		return RequestConfig.request({
+			url: `${ApiDomains.base}/auth`,
+			method: 'delete',
+			data
+		})
+	}
 	getUserInfo() {
 		return RequestConfig.request({
 			url: `${ApiDomains.user}/getUserInfo`,
